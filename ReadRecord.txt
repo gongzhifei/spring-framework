@@ -1,0 +1,3 @@
+# spring Bean工厂容器，一般只用于spring 容器Bean对像的获取读取。支持重新加载
+ApplicationContext
+
