@@ -67,6 +67,7 @@ import org.springframework.util.PatternMatchUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.util.xml.DomUtils;
 
+// GZF: Spring xml Beans结构
 /**
  * Stateful delegate class used to parse XML bean definitions.
  * Intended for use by both the main parser and any extension
@@ -434,6 +435,7 @@ public class BeanDefinitionParserDelegate {
 			checkNameUniqueness(beanName, aliases, ele);
 		}
 
+		// GZF: 创建BeanDefinition对象，此时还未实例化bean
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
 			if (!StringUtils.hasText(beanName)) {
@@ -512,8 +514,10 @@ public class BeanDefinitionParserDelegate {
 		}
 
 		try {
+			// GZF:创建bd
 			AbstractBeanDefinition bd = createBeanDefinition(className, parent);
 
+			// GZF: 填充beanDefinition对象值 比如是否单例
 			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd);
 			bd.setDescription(DomUtils.getChildElementValueByTagName(ele, DESCRIPTION_ELEMENT));
 
@@ -522,7 +526,9 @@ public class BeanDefinitionParserDelegate {
 			parseReplacedMethodSubElements(ele, bd.getMethodOverrides());
 
 			parseConstructorArgElements(ele, bd);
+			//GZF: 解析 property
 			parsePropertyElements(ele, bd);
+			//GZF: 解析 qualifier
 			parseQualifierElements(ele, bd);
 
 			bd.setResource(this.readerContext.getResource());
@@ -546,6 +552,7 @@ public class BeanDefinitionParserDelegate {
 		return null;
 	}
 
+	// GZF: 重要方法
 	/**
 	 * Apply the attributes of the given bean element to the given bean * definition.
 	 * @param ele bean declaration element
