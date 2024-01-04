@@ -549,6 +549,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// Prepare this context for refreshing.
 			prepareRefresh();
 
+			// GZF: 获取Bean工厂,加载BeanDefinitions在这里面
 			// Tell the subclass to refresh the internal bean factory.
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
@@ -579,6 +580,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// Check for listener beans and register them.
 				registerListeners();
 
+				// GZF: 实例化所有剩余的（非懒加载单例Bean）单例。
 				// Instantiate all remaining (non-lazy-init) singletons.
 				finishBeanFactoryInitialization(beanFactory);
 
@@ -668,6 +670,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
+		// 加载BeanDefinition
 		refreshBeanFactory();
 		return getBeanFactory();
 	}
@@ -913,6 +916,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Allow for caching all bean definition metadata, not expecting further changes.
 		beanFactory.freezeConfiguration();
 
+		//GZF: 实例化单例Bean
 		// Instantiate all remaining (non-lazy-init) singletons.
 		beanFactory.preInstantiateSingletons();
 	}
@@ -924,6 +928,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	@SuppressWarnings("deprecation")
 	protected void finishRefresh() {
+		// 清除上下文级资源缓存（例如扫描的 ASM 元数据）。
 		// Clear context-level resource caches (such as ASM metadata from scanning).
 		clearResourceCaches();
 
