@@ -48,6 +48,9 @@ import org.springframework.lang.Nullable;
  * @see ClassPathResource
  * @see ByteArrayResource
  * @see InputStreamResource
+ *
+ * GZF:抽象了所有Spring内部用到的资源如:file、url、classPath
+ *
  */
 public interface Resource extends InputStreamSource {
 

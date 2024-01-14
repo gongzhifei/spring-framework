@@ -25,12 +25,14 @@ import org.springframework.lang.Nullable;
  * in a uniform manner.
  *
  * <p>The {@link ConfigurableBeanFactory} interface extends this interface.
- *
  * @author Juergen Hoeller
  * @since 2.0
  * @see ConfigurableBeanFactory
  * @see org.springframework.beans.factory.support.DefaultSingletonBeanRegistry
  * @see org.springframework.beans.factory.support.AbstractBeanFactory
+ *
+ *  * GZF:定义对单例Bean的注册及获取
+ *
  */
 public interface SingletonBeanRegistry {
 

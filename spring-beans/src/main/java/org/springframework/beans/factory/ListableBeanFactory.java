@@ -54,6 +54,9 @@ import org.springframework.lang.Nullable;
  * @since 16 April 2001
  * @see HierarchicalBeanFactory
  * @see BeanFactoryUtils
+ *
+ * GZF:根据各种条件获取Bean的配置清单
+ *
  */
 public interface ListableBeanFactory extends BeanFactory {
 

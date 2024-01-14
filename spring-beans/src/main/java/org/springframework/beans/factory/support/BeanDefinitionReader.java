@@ -36,6 +36,9 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 1.1
  * @see org.springframework.core.io.Resource
+ *
+ * GZF:定义资源文件读取并解析为BeanDefinition对象
+ *
  */
 public interface BeanDefinitionReader {
 

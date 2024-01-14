@@ -120,6 +120,9 @@ import org.springframework.util.StringUtils;
  * @see RootBeanDefinition
  * @see DefaultListableBeanFactory
  * @see BeanDefinitionRegistry
+ *
+ * GZF: 综合AbstractBeanFactory并对接口AutowireCapableBeanFactory实现
+ *
  */
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory
 		implements AutowireCapableBeanFactory {
@@ -174,6 +177,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	public AbstractAutowireCapableBeanFactory() {
 		super();
+		// 如果一个类实现了以下3个接口自动装配将不生效。如A引用B,B继承了以下接口A的B属性将会是Null
 		ignoreDependencyInterface(BeanNameAware.class);
 		ignoreDependencyInterface(BeanFactoryAware.class);
 		ignoreDependencyInterface(BeanClassLoaderAware.class);
@@ -299,6 +303,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * For further types to ignore, invoke this method for each type.
 	 * @see org.springframework.beans.factory.BeanFactoryAware
 	 * @see org.springframework.context.ApplicationContextAware
+	 *
+	 * GZF:自动装配的时候忽略指定接口,相似方法ignoreDependencyType
+	 * 查阅：如类A中引用了类B,类A中还有类B的setter方法(如果没有setter还是会自动装配)，如果ignoreDependencyInterface(B.class)
+	 * 那个获取了类A后A中的B将会是null不会自动注入。
+	 * ignoreDependencyType 则是类A中没有类B的setter方法设置了ignoreDependencyType(B.class) 不会自动装配类B
+	 * 作用应该是 方便Spring统一管理BeanNameAware.class、BeanFactoryAware.class、BeanClassLoaderAware.class，
+	 * 不允许手动引用这些类
+	 *
 	 */
 	public void ignoreDependencyInterface(Class<?> ifc) {
 		this.ignoredDependencyInterfaces.add(ifc);

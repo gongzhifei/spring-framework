@@ -55,6 +55,10 @@ import org.springframework.util.StringUtils;
  * @author Rob Harrop
  * @author Erik Wiersma
  * @since 18.12.2003
+ *
+ * GZF:实现BeanDefinitionDocumentReader 此类主要将Document对象解析
+ * 并使用BeanDefinitionParserDelegate解析Element
+ *
  */
 public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocumentReader {
 

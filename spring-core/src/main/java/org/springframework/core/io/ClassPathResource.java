@@ -45,9 +45,15 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 
 	private final String path;
 
+	/**
+	 * GZF:通过classLoader.getResourceAsStream(this.path)获取inputStream
+	 */
 	@Nullable
 	private ClassLoader classLoader;
 
+	/**
+	 * GZF:通过clazz.getResourceAsStream(this.path)获取inputStream
+	 */
 	@Nullable
 	private Class<?> clazz;
 

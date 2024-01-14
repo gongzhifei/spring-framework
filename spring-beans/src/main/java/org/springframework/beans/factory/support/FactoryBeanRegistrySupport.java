@@ -40,6 +40,9 @@ import org.springframework.lang.Nullable;
  *
  * @author Juergen Hoeller
  * @since 2.5.1
+ *
+ * GZF:在DefaultSingletonBeanRegistry的基础之上增加对FactoryBean的特殊处理
+ *
  */
 public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanRegistry {
 

@@ -37,6 +37,8 @@ import org.springframework.util.StringValueResolver;
  * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}
  * implementations.
  *
+ * GZF:主要使用map做为alias的缓存,实现AliasRegistry
+ *
  * @author Juergen Hoeller
  * @author Qimiao Chen
  * @since 2.5.2

@@ -54,6 +54,10 @@ import org.springframework.core.io.Resource;
 @SuppressWarnings({"serial", "all"})
 public class XmlBeanFactory extends DefaultListableBeanFactory {
 
+	/**
+	 * 相较于父类多了XML读取器，用于解析xml BeanDefinition
+	 * 主要用reader对资源的进行读取和注册
+	 */
 	private final XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(this);
 
 
@@ -76,6 +80,7 @@ public class XmlBeanFactory extends DefaultListableBeanFactory {
 	 */
 	public XmlBeanFactory(Resource resource, BeanFactory parentBeanFactory) throws BeansException {
 		super(parentBeanFactory);
+		// GZF:资源加载的入口
 		this.reader.loadBeanDefinitions(resource);
 	}
 

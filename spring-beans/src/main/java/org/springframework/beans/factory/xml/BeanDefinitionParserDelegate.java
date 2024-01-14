@@ -82,6 +82,9 @@ import org.springframework.util.xml.DomUtils;
  * @since 2.0
  * @see ParserContext
  * @see DefaultBeanDefinitionDocumentReader
+ *
+ * GZF:定义解析Element的各种方法
+ *
  */
 public class BeanDefinitionParserDelegate {
 

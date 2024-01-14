@@ -58,7 +58,8 @@ public class BeansDtdResolver implements EntityResolver {
 			logger.trace("Trying to resolve XML entity with public ID [" + publicId +
 					"] and system ID [" + systemId + "]");
 		}
-
+		// XSD publicId = null	systemId = https://www.springframework.org/schema/beans/spring-beans.xsd
+		// DTD publicId = -//Spring//DTD BEAN 2.0//EN	systemId = http://www.Springframework.org/dtd/Spring-beans-2.0.dtd
 		if (systemId != null && systemId.endsWith(DTD_EXTENSION)) {
 			int lastPathSeparator = systemId.lastIndexOf('/');
 			int dtdNameStart = systemId.indexOf(DTD_NAME, lastPathSeparator);

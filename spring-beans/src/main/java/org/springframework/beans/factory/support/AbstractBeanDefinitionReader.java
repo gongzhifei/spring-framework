@@ -45,6 +45,10 @@ import org.springframework.util.Assert;
  * @author Chris Beams
  * @since 11.12.2003
  * @see BeanDefinitionReaderUtils
+ *
+ * GZF:BeanDefinitionReader:定义资源文件读取并解析为BeanDefinition对象，EnvironmentCapable定义获取environment方法
+ * 对以上两个接口的实现
+ *
  */
 public abstract class AbstractBeanDefinitionReader implements BeanDefinitionReader, EnvironmentCapable {
 
@@ -53,6 +57,9 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 
 	private final BeanDefinitionRegistry registry;
 
+	/**
+	 * GZF:资源加载器，用于根据给定的资源文件地址加载文件返回对应的Resource对象
+	 */
 	@Nullable
 	private ResourceLoader resourceLoader;
 

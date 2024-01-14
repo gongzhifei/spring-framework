@@ -116,6 +116,9 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor#postProcessBeforeDestruction
  * @see DisposableBean#destroy
  * @see org.springframework.beans.factory.support.RootBeanDefinition#getDestroyMethodName
+ *
+ * GZF:定义获取Bean及Bean的各种属性
+ *
  */
 public interface BeanFactory {
 
