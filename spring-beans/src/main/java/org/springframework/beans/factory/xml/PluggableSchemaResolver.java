@@ -51,6 +51,8 @@ import org.springframework.util.CollectionUtils;
  * <p>The pattern for the mapping files can be overridden using the
  * {@link #PluggableSchemaResolver(ClassLoader, String)} constructor.
  *
+ * <p>Spring XSD EntityResolver加载器</p>
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @since 2.0

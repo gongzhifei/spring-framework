@@ -70,19 +70,20 @@ public abstract class CoroutinesUtils {
 	 * {@link Flux}.
 	 */
 	public static Publisher<?> invokeSuspendingFunction(Method method, Object target, Object... args) {
-		KFunction<?> function = Objects.requireNonNull(ReflectJvmMapping.getKotlinFunction(method));
-		if (method.isAccessible() && !KCallablesJvm.isAccessible(function)) {
-			KCallablesJvm.setAccessible(function, true);
-		}
-		KClassifier classifier = function.getReturnType().getClassifier();
-		Mono<Object> mono = MonoKt.mono(Dispatchers.getUnconfined(), (scope, continuation) ->
-					KCallables.callSuspend(function, getSuspendedFunctionArgs(target, args), continuation))
-				.filter(result -> !Objects.equals(result, Unit.INSTANCE))
-				.onErrorMap(InvocationTargetException.class, InvocationTargetException::getTargetException);
-		if (classifier != null && classifier.equals(JvmClassMappingKt.getKotlinClass(Flow.class))) {
-			return mono.flatMapMany(CoroutinesUtils::asFlux);
-		}
-		return mono;
+//		KFunction<?> function = Objects.requireNonNull(ReflectJvmMapping.getKotlinFunction(method));
+//		if (method.isAccessible() && !KCallablesJvm.isAccessible(function)) {
+//			KCallablesJvm.setAccessible(function, true);
+//		}
+//		KClassifier classifier = function.getReturnType().getClassifier();
+//		Mono<Object> mono = MonoKt.mono(Dispatchers.getUnconfined(), (scope, continuation) ->
+//					KCallables.callSuspend(function, getSuspendedFunctionArgs(target, args), continuation))
+//				.filter(result -> !Objects.equals(result, Unit.INSTANCE))
+//				.onErrorMap(InvocationTargetException.class, InvocationTargetException::getTargetException);
+//		if (classifier != null && classifier.equals(JvmClassMappingKt.getKotlinClass(Flow.class))) {
+//			return mono.flatMapMany(CoroutinesUtils::asFlux);
+//		}
+//		return mono;
+		return null;
 	}
 
 	private static Object[] getSuspendedFunctionArgs(Object target, Object... args) {

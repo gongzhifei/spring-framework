@@ -108,6 +108,8 @@ import org.springframework.util.StringUtils;
  * {@link BeanDefinitionRegistry} interfaces, which represent the API and SPI
  * view of such a factory, respectively.
  *
+ * 负责Bean的创建、属性填充、初始化工作.在该类的doCreateBean方法中，会调用initializeBean方法，进而执行Aware接口的处理。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -120,9 +122,6 @@ import org.springframework.util.StringUtils;
  * @see RootBeanDefinition
  * @see DefaultListableBeanFactory
  * @see BeanDefinitionRegistry
- *
- * GZF: 综合AbstractBeanFactory并对接口AutowireCapableBeanFactory实现
- *
  */
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory
 		implements AutowireCapableBeanFactory {
@@ -177,7 +176,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	public AbstractAutowireCapableBeanFactory() {
 		super();
-		// 如果一个类实现了以下3个接口自动装配将不生效。如A引用B,B继承了以下接口A的B属性将会是Null
+		// ignoreDependencyInterface方法默认忽略了BeanNameAware、BeanFactoryAware、BeanClassLoaderAware接口
+		// 防止自动注入干扰 这些接口的调用都是由容器管理的(Bean初始化后处理)。而非手动@Autowrite注入管理。如果在Bean初始化赋完值在调用set方法时，再处理就有问题
+		// 确保声明周期可控 由容器在正确的时机调用 setBeanName，保障 Bean 名称注入的准确性和一致性。
+		// 框架设计边界隔离 区分容器逻辑与业务逻辑代码注入
+		// 在依赖注入的时候跳过 ignoredDependencyInterfaces 中的元素
+		// 可以自定义接口 调用 ignoreDependencyInterface 方法指定自定义接口
 		ignoreDependencyInterface(BeanNameAware.class);
 		ignoreDependencyInterface(BeanFactoryAware.class);
 		ignoreDependencyInterface(BeanClassLoaderAware.class);
@@ -1795,6 +1799,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	protected Object initializeBean(String beanName, Object bean, @Nullable RootBeanDefinition mbd) {
 		if (System.getSecurityManager() != null) {
 			AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
+				// 1.处理Bean实现的Aware接口。如BeanNameAware接口调用响应的setter方法
 				invokeAwareMethods(beanName, bean);
 				return null;
 			}, getAccessControlContext());
@@ -1803,12 +1808,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			invokeAwareMethods(beanName, bean);
 		}
 
+		// 2. 应用BeanPostProcessor的前置处理
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
 		try {
+			// 3. 调用初始化方法（如InitializingBean、init-method）
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {
@@ -1816,6 +1823,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					(mbd != null ? mbd.getResourceDescription() : null),
 					beanName, "Invocation of init method failed", ex);
 		}
+		// 4. 应用BeanPostProcessor的后置处理
 		if (mbd == null || !mbd.isSynthetic()) {
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}

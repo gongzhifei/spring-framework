@@ -88,7 +88,7 @@ public class XmlValidationModeDetector {
 	 * @see #VALIDATION_DTD
 	 * @see #VALIDATION_XSD
 	 *
-	 * GZF:检测XML验证模式
+	 * 检测XML验证模式
 	 *
 	 */
 	public int detectValidationMode(InputStream inputStream) throws IOException {
@@ -100,21 +100,22 @@ public class XmlValidationModeDetector {
 			String content;
 			while ((content = reader.readLine()) != null) {
 				content = consumeCommentTokens(content);
-				// 如果读取的是空行或者是注释则略过
+				// 如果读取的行是空行或者注释则略过
 				if (!StringUtils.hasText(content)) {
 					continue;
 				}
-				// 具体的验证条件，判断是否包含DOCTYPE,如果包含DTD否则XSD
+				// 内容是否包含"DOCTYPE"
 				if (hasDoctype(content)) {
 					isDtdValidated = true;
 					break;
 				}
-				// 读取到<开始符号，验证模式一定会在开始符号之前
+				// 读取到 < 开始标签，验证模式一定会在开始符号之前
 				if (hasOpeningTag(content)) {
 					// End of meaningful data...
 					break;
 				}
 			}
+			// 是否包含了 "DOCTYPE" 包含就是DTD, 否则就是XSD
 			return (isDtdValidated ? VALIDATION_DTD : VALIDATION_XSD);
 		}
 		catch (CharConversionException ex) {

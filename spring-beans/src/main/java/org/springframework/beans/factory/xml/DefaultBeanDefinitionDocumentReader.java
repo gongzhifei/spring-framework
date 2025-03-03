@@ -150,8 +150,10 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			}
 		}
 
+		// 解析前处理 子类可以扩展
 		preProcessXml(root);
 		parseBeanDefinitions(root, this.delegate);
+		// 解析后处理 子类可以扩展
 		postProcessXml(root);
 
 		this.delegate = parent;
@@ -182,6 +184,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 						parseDefaultElement(ele, delegate);
 					}
 					else {
+						// 解析自定义标签 如<tx:annotation-driven/>
 						delegate.parseCustomElement(ele);
 					}
 				}
@@ -194,17 +197,19 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 
 	private void parseDefaultElement(Element ele, BeanDefinitionParserDelegate delegate) {
 		if (delegate.nodeNameEquals(ele, IMPORT_ELEMENT)) {
+			// import标签处理
 			importBeanDefinitionResource(ele);
 		}
 		else if (delegate.nodeNameEquals(ele, ALIAS_ELEMENT)) {
+			// alias标签处理
 			processAliasRegistration(ele);
 		}
 		else if (delegate.nodeNameEquals(ele, BEAN_ELEMENT)) {
-			// GZF: bean 标签解析
+			// bean 标签解析
 			processBeanDefinition(ele, delegate);
 		}
 		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {
-			// recurse
+			// beans标签处理
 			doRegisterBeanDefinitions(ele);
 		}
 	}
@@ -310,11 +315,13 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * and registering it with the registry.
 	 */
 	protected void processBeanDefinition(Element ele, BeanDefinitionParserDelegate delegate) {
-		// GZF: 解析BeanDefinition, 此对象包含beanDefinition
+		// 解析XML的标签元素，返回dbHolder包含beanDefinition对象，此对象包含Bean标签各种属性如id,class、name、alias等
 		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
 		if (bdHolder != null) {
+			// 如若有标签下的子节点自定义属性还需要再解析 如User Bean 标签下的<property>标签
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {
+				// 对解析后的BeanDefinitionHolder进行注册
 				// Register the final decorated instance.
 				BeanDefinitionReaderUtils.registerBeanDefinition(bdHolder, getReaderContext().getRegistry());
 			}
@@ -322,6 +329,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				getReaderContext().error("Failed to register bean definition with name '" +
 						bdHolder.getBeanName() + "'", ele, ex);
 			}
+			// 通知相关监听器当前Bean已加载完毕
 			// Send registration event.
 			getReaderContext().fireComponentRegistered(new BeanComponentDefinition(bdHolder));
 		}

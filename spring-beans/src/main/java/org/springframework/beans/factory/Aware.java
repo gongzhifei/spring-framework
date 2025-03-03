@@ -28,6 +28,9 @@ package org.springframework.beans.factory;
  * Refer to {@link org.springframework.context.support.ApplicationContextAwareProcessor}
  * for an example of processing specific {@code *Aware} interface callbacks.
  *
+ * Aware接口让Bean能够感知到Spring容器的一些特定信息，比如Bean的名称、BeanFactory、ApplicationContext等
+ * 通过回调(callback-style)的方式去感知,调用响应的setter方法
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1
