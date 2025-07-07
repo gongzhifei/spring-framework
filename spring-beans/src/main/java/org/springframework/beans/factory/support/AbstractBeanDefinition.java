@@ -141,65 +141,149 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	@Nullable
 	private volatile Object beanClass;
 
+	/**
+	 * Bean的作用范围，对应Bean的scope属性
+	 */
 	@Nullable
 	private String scope = SCOPE_DEFAULT;
 
+	/**
+	 * 是否是抽象，对应Bean的abstract属性
+	 */
 	private boolean abstractFlag = false;
 
+	/**
+	 * 是否是懒加载，对应Bean的lazy-init属性
+	 */
 	@Nullable
 	private Boolean lazyInit;
 
+	/**
+	 * 自动注入模式，对应Bean的autowire属性
+	 */
 	private int autowireMode = AUTOWIRE_NO;
 
+	/**
+	 * 依赖检查模式，对应Bean的dependency-check属性 spring3.0后弃用
+	 */
 	private int dependencyCheck = DEPENDENCY_CHECK_NONE;
 
+	/**
+	 * 表示一个Bean的实例化依赖于另一个Bean先实例化，对应Bean的depends-on属性
+	 */
 	@Nullable
 	private String[] dependsOn;
 
+	/**
+	 * 是否是自动注入的候选者，对应Bean的autowire-candidate属性
+	 * 容器在查找自动装配对象时，如果设置了false,则不会将这个Bean作为自动装配对象给其他Bean注入。但是该Bean还可以装配其他Bean作为注入对象
+	 */
 	private boolean autowireCandidate = true;
 
+	/**
+	 * 自动装配时，如果出现多个的匹配项，将作为首选，对应Bean的primary属性
+	 */
 	private boolean primary = false;
 
+	/**
+	 * 记录qualifier,对应子元素qualifier
+	 *
+	 */
 	private final Map<String, AutowireCandidateQualifier> qualifiers = new LinkedHashMap<>();
 
 	@Nullable
 	private Supplier<?> instanceSupplier;
 
+	/**
+	 * 允许访问非公开的构造函数和方法，对应Bean的allow-unsatisfied-dependencies属性
+	 */
 	private boolean nonPublicAccessAllowed = true;
 
+	/**
+	 * 是否以一种安全的方式去构造对象，对应Bean的autowire-constructor属性,默认true
+	 * 如果设置false,会存在以下状况：
+	 * interface ITest{}
+	 * class Test implements ITest{}
+	 * class TestFactory{
+	 *     public TestFactory(ITest i){}
+	 *     public TestFactory(Test t){}
+	 * }
+	 * 如果此时创建TestFactory的实例，会抛出异常，因为无法确定使用哪个构造函数
+	 */
 	private boolean lenientConstructorResolution = true;
 
+	/**
+	 * 对应bean的factory-bean属性用法
+	 * <bean id="testFactory" class="com.test.TestFactory" />
+	 * <bean id="test" factory-bean="testFactory" factory-method="getTest" />
+	 */
 	@Nullable
 	private String factoryBeanName;
 
+	/**
+	 * 对应bean的factory-method属性用法
+	 */
 	@Nullable
 	private String factoryMethodName;
 
+	/**
+	 * 记录构造函数注入属性，对应bean属性constructor-arg
+	 */
 	@Nullable
 	private ConstructorArgumentValues constructorArgumentValues;
 
+	/**
+	 * 记录属性注入属性，对应bean属性property属性集合
+	 */
 	@Nullable
 	private MutablePropertyValues propertyValues;
 
+	/**
+	 * 方法重写的持有者，记录lookup-method、replaced-method元素
+	 */
 	private MethodOverrides methodOverrides = new MethodOverrides();
 
+	/**
+	 * 初始化方法，对应bean的init-method属性
+	 */
 	@Nullable
 	private String initMethodName;
 
+	/**
+	 * 销毁方法，对应bean的destroy-method属性
+	 */
 	@Nullable
 	private String destroyMethodName;
 
+	/**
+	 * 是否执行init-method方法，由程序设定
+	 */
 	private boolean enforceInitMethod = true;
 
+	/**
+	 * 是否执行destroy-method方法，由程序设定
+	 */
 	private boolean enforceDestroyMethod = true;
 
+	/**
+	 * 是否是用户定义的还是由程序本身定义的，创建AOP的时候为true，由程序设定
+	 */
 	private boolean synthetic = false;
 
+	/**
+	 * 定义这个Bean的应用，ROLE_APPLICATION：用户，ROLE_INFRASTRUCTURE：框架内部使用，与用户无关；ROLE_SUPPORT：支持类，例如事务管理器；ROLE_INFRASTRUCTURE：基础类，例如AOP代理工厂。
+	 */
 	private int role = BeanDefinition.ROLE_APPLICATION;
 
+	/**
+	 * bean的描述信息
+	 */
 	@Nullable
 	private String description;
 
+	/**
+	 * bean的资源信息
+	 */
 	@Nullable
 	private Resource resource;
 

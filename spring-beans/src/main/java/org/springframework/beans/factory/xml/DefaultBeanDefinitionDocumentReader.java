@@ -219,17 +219,20 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * from the given resource into the bean factory.
 	 */
 	protected void importBeanDefinitionResource(Element ele) {
+		// 获取resource属性
 		String location = ele.getAttribute(RESOURCE_ATTRIBUTE);
 		if (!StringUtils.hasText(location)) {
 			getReaderContext().error("Resource location must not be empty", ele);
 			return;
 		}
 
+		// 解析系统属性，格式如: ${user.dir}
 		// Resolve system properties: e.g. "${user.dir}"
 		location = getReaderContext().getEnvironment().resolveRequiredPlaceholders(location);
 
 		Set<Resource> actualResources = new LinkedHashSet<>(4);
 
+		// 判断location是相对路径还是绝对路径
 		// Discover whether the location is an absolute or relative URI
 		boolean absoluteLocation = false;
 		try {
@@ -240,6 +243,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			// unless it is the well-known Spring prefix "classpath*:"
 		}
 
+		// 绝对路径处理
 		// Absolute or relative?
 		if (absoluteLocation) {
 			try {
@@ -256,6 +260,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		else {
 			// No URL -> considering resource location as relative to the current file.
 			try {
+				// 相对路径处理
 				int importCount;
 				Resource relativeResource = getReaderContext().getResource().createRelative(location);
 				if (relativeResource.exists()) {
@@ -318,6 +323,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// 解析XML的标签元素，返回dbHolder包含beanDefinition对象，此对象包含Bean标签各种属性如id,class、name、alias等
 		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
 		if (bdHolder != null) {
+			// 装饰BeanDefinition 如果需要的话
 			// 如若有标签下的子节点自定义属性还需要再解析 如User Bean 标签下的<property>标签
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {
@@ -329,7 +335,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				getReaderContext().error("Failed to register bean definition with name '" +
 						bdHolder.getBeanName() + "'", ele, ex);
 			}
-			// 通知相关监听器当前Bean已加载完毕
+			// 通知相关监听器当前Bean已加载完毕,留下扩展点spring未做任何处理
 			// Send registration event.
 			getReaderContext().fireComponentRegistered(new BeanComponentDefinition(bdHolder));
 		}
