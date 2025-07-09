@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.testfixture.beans.*;
 import org.xml.sax.InputSource;
 
 import org.springframework.aop.framework.ProxyFactory;
@@ -51,12 +52,6 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.MethodReplacer;
 import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.beans.testfixture.beans.DependenciesBean;
-import org.springframework.beans.testfixture.beans.DerivedTestBean;
-import org.springframework.beans.testfixture.beans.FactoryMethods;
-import org.springframework.beans.testfixture.beans.ITestBean;
-import org.springframework.beans.testfixture.beans.IndexedTestBean;
-import org.springframework.beans.testfixture.beans.TestBean;
 import org.springframework.beans.testfixture.beans.factory.DummyFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
@@ -317,6 +312,15 @@ class XmlBeanFactoryTests {
 		assertThat(inherits.getAge() == 1).isTrue();
 		TestBean inherits2 = (TestBean) child.getBean("inheritsFromParentFactory");
 		assertThat(inherits2 == inherits).isFalse();
+	}
+
+	@Test
+	void xmlBeanFactoryTest() {
+		ClassPathResource customResource = new ClassPathResource("customize.xml", this.getClass());
+		XmlBeanFactory xbf = new XmlBeanFactory(customResource);
+		User user = xbf.getBean(User.class);
+		System.out.println("飒飒飒:"+user);
+		System.out.println();
 	}
 
 	@Test
