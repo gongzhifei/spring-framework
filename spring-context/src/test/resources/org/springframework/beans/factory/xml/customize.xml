@@ -5,6 +5,20 @@
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="user" class="org.springframework.beans.testfixture.beans.User">
+		<property name="name">
+			<value>Juergen</value>
+		</property>
+		<property name="age">
+			<value>34</value>
+		</property>
+		<property name="level">
+			<ref bean="level"/>
+		</property>
+	</bean>
+	<bean id="level" class="org.springframework.beans.testfixture.beans.Level" >
+		<property name="level">
+			<value>1</value>
+		</property>
 	</bean>
 
 </beans>
