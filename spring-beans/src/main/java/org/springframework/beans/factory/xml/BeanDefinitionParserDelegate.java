@@ -476,7 +476,7 @@ public class BeanDefinitionParserDelegate {
 				}
 			}
 			String[] aliasesArray = StringUtils.toStringArray(aliases);
-			// 将BeanDefinitionHolder对象封装到dbHolder中
+			// 将BeanDefinition 对象封装到dbHolder中
 			return new BeanDefinitionHolder(beanDefinition, beanName, aliasesArray);
 		}
 

@@ -181,6 +181,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
+		// Spring采用三级缓存来管理Bean的创建过程,确保即使存在循环依赖也能顺利完成Bean的实例化、属性填充和初始化
+		// singletonObjects 一级缓存，缓存已经完全初始化好的单例Bean
+		// earlySingletonObjects 二级缓存，提前暴漏的早期Bean（已经实例化但为填充初始化的）
+		// singletonFactories 三级缓存，保存的是 生成早期Bean 的工厂对象
+
 		// Quick check for existing instance without full singleton lock
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {

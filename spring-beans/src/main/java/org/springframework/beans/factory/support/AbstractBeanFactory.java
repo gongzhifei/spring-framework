@@ -326,7 +326,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				if (requiredType != null) {
 					beanCreation.tag("beanType", requiredType::toString);
 				}
-				// 将存储XML配置文件的GernericBeanDefinition 转换为RootBeanDefinition，如果指定 BeanName 是子 Bean 的话同时会合并父类的相关属性
+				// 将存储XML配置文件的GenericBeanDefinition 转换为RootBeanDefinition，如果指定 BeanName 是子 Bean 的话同时会合并父类的相关属性
 				RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
 

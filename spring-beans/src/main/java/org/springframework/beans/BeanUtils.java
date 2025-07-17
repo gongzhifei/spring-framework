@@ -208,6 +208,7 @@ public abstract class BeanUtils {
 						argsWithDefaultValues[i] = args[i];
 					}
 				}
+				// getBean最终反射创建对象
 				return ctor.newInstance(argsWithDefaultValues);
 			}
 		}
